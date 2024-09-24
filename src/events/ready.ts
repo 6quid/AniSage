@@ -67,7 +67,7 @@ export default {
 
           // Send the embed if there's at least one anime airing today
           if (animeCount > 0) {
-            channel.send("<@everyone>");
+            channel.send("@everyone");
             channel.send({ embeds: [embed] });
           } else {
             // Send a message if no anime is airing today

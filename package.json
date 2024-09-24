@@ -1,0 +1,36 @@
+{
+  "name": "discordproject",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "cross-fetch": "^4.0.0",
+    "discord.js": "^14.16.1",
+    "dotenv": "^16.4.5",
+    "graphql-config": "^5.1.2",
+    "graphql-request": "^7.1.0",
+    "node-cron": "^3.0.3",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.5.2",
+    "@types/node-cron": "^3.0.11",
+    "@types/ws": "^8.5.12",
+    "eslint": "^9.9.1",
+    "eslint-plugin-graphql": "^3.1.1",
+    "nodemon": "^3.1.4",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.0",
+    "typescript": "^5.5.4"
+  }
+}

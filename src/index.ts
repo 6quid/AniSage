@@ -35,6 +35,26 @@ export interface Anime {
   };
 }
 
+export interface Media {
+  format: string;
+  title: {
+    english?: string;
+    romaji: string;
+  };
+  siteUrl: string;
+  coverImage: {
+    medium: string;
+  };
+}
+
+export interface AiringSchedule {
+  id: number;
+  anime: Anime;
+  airingAt: number;
+  timeUntilAiring: number;
+  episode: number;
+  media: Media;
+}
 //media query response structure
 export interface AnimeResponse {
   data: {
@@ -45,10 +65,10 @@ export interface AnimeResponse {
 }
 
 //AiringSchedule query response structure
-export interface AiringSchedule {
+export interface AiringScheduleResponse {
   data: {
     Page: {
-      airingSchedules: [];
+      airingSchedules: AiringSchedule[];
     };
   };
 }

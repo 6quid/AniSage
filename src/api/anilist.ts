@@ -1,6 +1,6 @@
 import axios from "axios";
 import { GET_TRENDING_ANIME } from "../graphql/queries/getTrendingAnime";
-import { AiringSchedule, AnimeResponse } from "..";
+import { AiringSchedule, AiringScheduleResponse, AnimeResponse } from "..";
 import { LATEST_ANIME_RELEASING } from "../graphql/queries/latestReleasingAnime";
 
 const API_URL = "https://graphql.anilist.co/";
@@ -22,7 +22,7 @@ export const fetchTrendingAnime = async (sortOption: string) => {
 export const fetchLatestAnime = async () => {
   const query = LATEST_ANIME_RELEASING;
   try {
-    const response = await axios.post<AiringSchedule>(API_URL, {
+    const response = await axios.post<AiringScheduleResponse>(API_URL, {
       query,
     });
 

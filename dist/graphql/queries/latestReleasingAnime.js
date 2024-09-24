@@ -1,4 +1,7 @@
-export const LATEST_ANIME_RELEASING = `{
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LATEST_ANIME_RELEASING = void 0;
+exports.LATEST_ANIME_RELEASING = `{
     Page(page: 1, perPage: 15){
         airingSchedules(notYetAired: true, sort: TIME){
             episode
@@ -10,9 +13,6 @@ export const LATEST_ANIME_RELEASING = `{
                     romaji
                 }
                 siteUrl
-                coverImage {
-                        medium
-                }
             }
         }
     }

@@ -6,16 +6,13 @@ export const fetchLatestAnime = async () => {
         airingSchedules(notYetAired: true, sort: TIME){
             episode
             airingAt
-            media{
-                title{
+            media {
+                title {
                     english
                     romaji
                 }
-                nextAiringEpisode {
-                    id
-                }
-                duration
-                status
+                format
+                siteUrl
             }
         }
     }
@@ -44,6 +41,30 @@ export const fetchLatestAnime = async () => {
   }
 };
 
-fetchLatestAnime()
-  .then((anime) => console.log("ANIME: ", anime))
-  .catch((error) => console.log(error));
+const response = await fetchLatestAnime();
+try {
+  const airingTime = response.map((anime) => {
+    return {
+      format: anime.media.format,
+      title: anime.media.title.english,
+      episode: anime.episode,
+      url: anime.media.siteUrl,
+      airingAt: new Date(anime.airingAt * 1000).toLocaleString(),
+    };
+  });
+
+  for (const anime of airingTime) {
+    const date = "2024-09-24";
+
+    const animeDate = anime.airingAt.slice(0, 10);
+    const animeTime = anime.airingAt.slice(12, 25);
+
+    if (anime.format === "TV" && date === animeDate) {
+      console.log(
+        `${anime.title} will be airing on ${animeDate} at ${animeTime} \nLink: ${anime.url} `
+      );
+    }
+  }
+} catch (error) {
+  console.log(error);
+}

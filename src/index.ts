@@ -46,6 +46,30 @@ export interface Media {
     medium: string;
   };
 }
+export interface InfoMedia {
+  description: string;
+  startDate: {
+    year: number;
+    month: number;
+    day: number;
+  };
+  genres: string[];
+  source: string;
+  chapters?: number; // For manga, if applicable
+  volumes?: number; // For manga, if applicable
+  episodes?: number; // For anime, if applicable
+  averageScore?: number; // Out of 100
+  status: string; // e.g., "RELEASING", "FINISHED"
+  nextAiringEpisode?: {
+    id: number;
+    airingAt: number;
+    episode: number;
+  };
+  coverImage: {
+    large: string;
+    medium: string;
+  };
+}
 
 export interface AiringSchedule {
   id: number;
@@ -61,6 +85,13 @@ export interface AnimeResponse {
     Page: {
       media: Anime[];
     };
+  };
+}
+
+// Response interface for Anime/Manga or any format Info
+export interface MediaInfoResponse {
+  data: {
+    Media: InfoMedia[];
   };
 }
 

@@ -14,7 +14,7 @@ const execute: Command["execute"] = async (interaction) => {
     const formattedJoinDate = joinDate.toDateString(); // Example: "Mon Sep 04 2023"
 
     await interaction.reply(
-      `Pong! Pong!\n@${interaction.user.username}, you joined on ${formattedJoinDate}`
+      `Pong! Pong!\n<@${interaction.user.id}>, you joined on ${formattedJoinDate}`
     );
   } else {
     await interaction.reply("Couldn't retrieve your join date.");

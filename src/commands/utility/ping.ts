@@ -1,5 +1,5 @@
 import { GuildMember, SlashCommandBuilder } from "discord.js";
-import { Command } from "../../index";
+import { Command } from "../../interfaces/interfcaes";
 
 const data = new SlashCommandBuilder()
   .setName("ping")
@@ -22,7 +22,7 @@ const execute: Command["execute"] = async (interaction) => {
 };
 
 const pingCommand: Command = {
-  data: data,
+  data: data as SlashCommandBuilder,
   execute: execute,
 };
 

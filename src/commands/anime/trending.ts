@@ -5,7 +5,7 @@ import {
   GuildMember,
   SlashCommandBuilder,
 } from "discord.js";
-import { Anime, Command } from "../../index";
+import { Anime, Command } from "../../interfaces/interfcaes";
 import { fetchTrendingAnime } from "../../api/anilist";
 
 const sortChoices: { [key: string]: string } = {
@@ -50,7 +50,7 @@ const execute: Command["execute"] = async (
 
       // making anime field from animes retirived via animeList.
       const animeDataField = animeList.map((anime: Anime) => ({
-        name: anime.title.english || anime.title.romaji || "No English Title",
+        name: anime.title.english || anime.title.romaji,
         value: `Link: ${anime.siteUrl} \n`,
         inline: false,
       }));
@@ -76,7 +76,7 @@ const execute: Command["execute"] = async (
 };
 
 const trendingCommand: Command = {
-  data: data,
+  data: data as SlashCommandBuilder,
   execute: execute,
 };
 

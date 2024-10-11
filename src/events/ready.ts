@@ -1,7 +1,8 @@
 import { EmbedBuilder, Events, TextChannel } from "discord.js";
-import { AiringSchedule, BotClient } from "../index";
+import { AiringSchedule } from "../interfaces/interfcaes";
 import cron from "node-cron";
 import { fetchLatestAnime } from "../api/anilist";
+import { type BotClient } from "..";
 
 const channelID = process.env.CHANNEL_ID;
 export default {

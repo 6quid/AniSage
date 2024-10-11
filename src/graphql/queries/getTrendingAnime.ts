@@ -3,6 +3,7 @@ export const GET_TRENDING_ANIME = (sortOption: string) => `{
     media(sort: ${sortOption}, type: ANIME) {
       title {
         english
+        romaji
       }
       coverImage {
         medium

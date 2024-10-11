@@ -1,5 +1,6 @@
-export const ANIME_INFO = (search: string, format: string, type: string) => `{
-    Media(search: ${search}, format: ${format}, type: ${type}) {
+export const ANIME_INFO = (search: string, format: string) => `{
+  Media(search: "${search}", format: ${format}) {
+    format
     title {
       romaji
       native
@@ -25,5 +26,17 @@ export const ANIME_INFO = (search: string, format: string, type: string) => `{
     coverImage {
       large
     }
+    staff {
+      edges {
+        role
+        node {
+          name {
+            full
+          }
+        }
+      }
+    }
+    siteUrl
+    bannerImage
   }
 }`;

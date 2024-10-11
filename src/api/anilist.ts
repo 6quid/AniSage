@@ -6,9 +6,8 @@ import {
   Anime,
   AnimeResponse,
   InfoMedia,
-  Media,
   MediaInfoResponse,
-} from "..";
+} from "../interfaces/interfcaes";
 import { LATEST_ANIME_RELEASING } from "../graphql/queries/latestReleasingAnime";
 import { ANIME_INFO } from "../graphql/queries/getAnimeInfo";
 
@@ -51,10 +50,9 @@ export const fetchLatestAnime = async (): Promise<AiringSchedule[]> => {
 // Fetch detailed information about a specific anime
 export const fetchAnimeInfo = async (
   search: string, // Anime name to search for
-  format: string, // Format of the anime (e.g., TV, OVA)
-  type: string // Type of media (e.g., ANIME, MANGA)
-): Promise<InfoMedia[] | null> => {
-  const query = ANIME_INFO(search, format, type);
+  format: string // Format of the anime (e.g., TV, OVA)
+): Promise<InfoMedia | null> => {
+  const query = ANIME_INFO(search, format);
   try {
     const response = await axios.post<MediaInfoResponse>(API_URL, {
       query,
@@ -65,7 +63,42 @@ export const fetchAnimeInfo = async (
   } catch (error) {
     console.log(`Error retrieving info about ${search}. \n${error}`);
     throw new Error(
-      `Failed to retrieve Information about ${search} with format ${format} of type ${type}`
+      `Failed to retrieve Information about ${search} with format ${format}`
     );
   }
+};
+
+// Fetch The anime titles and store them in a string[] used for Auto Complete
+export const fetchAnimeTitles = async (anime: string): Promise<string[]> => {
+  let animeTitles: string[] = [];
+
+  const query = `{
+    Page(page: 1, perPage: 25) {
+      media(search: "${anime}") {
+        title {
+          english
+          romaji
+        }
+        format  
+      }
+    }
+  }`;
+
+  try {
+    const response = await axios.post<AnimeResponse>(API_URL, {
+      query,
+    });
+
+    const media: Anime[] = response.data.data.Page.media;
+    if (media.length > 0) {
+      media.forEach((anime) => {
+        if (anime.format === "TV" || anime.format === "Manga") {
+          animeTitles.push(anime.title.english ?? anime.title.romaji);
+        }
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  return animeTitles as any;
 };

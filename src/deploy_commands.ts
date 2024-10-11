@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "node:fs";
-import { Command } from ".";
+import { Command } from "./interfaces/interfcaes";
 import { APIApplicationCommand, REST, Routes } from "discord.js";
 import dotenv from "dotenv";
 
@@ -22,6 +22,8 @@ for (const folder of commandFolder) {
   for (const file of commandFiles) {
     const filePath = path.join(commandsPath, file);
     const command = require(filePath).default as Command as any;
+
+    // console.log("load cmd", filePath, command);
 
     if ("data" in command && "execute" in command) {
       commands.push(command.data.toJSON());
@@ -52,7 +54,7 @@ const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
     )) as APIApplicationCommand[];
 
     console.log(
-      `Successfully reloaded ${data.length} application (/) commands.`
+      ` ✅ Successfully reloaded ${data.length} application (/) commands.`
     );
   } catch (error) {
     console.error(error);

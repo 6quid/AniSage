@@ -1,13 +1,8 @@
 import {
-  ActionRowBuilder,
   CommandInteraction,
-  CommandInteractionOption,
   CommandInteractionOptionResolver,
   GuildMember,
-  Options,
   SlashCommandBuilder,
-  StringSelectMenuBuilder,
-  StringSelectMenuOptionBuilder,
 } from "discord.js";
 import { Command } from "../../interfaces/interfcaes";
 import { zoroAnimeInfo } from "../../api/zoroTv";
@@ -33,10 +28,10 @@ const execute: Command["execute"] = async (
       interaction.options as CommandInteractionOptionResolver
     ).getString("search")!;
 
-    interaction.deferReply();
+    await interaction.deferReply();
     const animeUrls = (await zoroAnimeInfo(animeName)).url;
 
-    interaction.editReply(`${animeUrls}`);
+    await interaction.editReply(`${animeUrls}`);
   }
 };
 

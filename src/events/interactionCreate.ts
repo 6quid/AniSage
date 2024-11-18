@@ -57,11 +57,13 @@ export default {
 
           // Filter the Titles to Lower cases
           const filteredValues = choices.filter((titles) => {
-            return titles.toLowerCase();
+            return titles.toLowerCase().includes(focusedValue.toLowerCase());
           });
 
           await interaction.respond(
-            filteredValues.map((title: any) => ({ name: title, value: title }))
+            filteredValues.length
+              ? filteredValues.map((title) => ({ name: title, value: title }))
+              : []
           );
         } else if (interaction.commandName === "watch") {
           const focusedValue = interaction.options.getFocused();

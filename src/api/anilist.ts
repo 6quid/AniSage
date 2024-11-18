@@ -10,6 +10,7 @@ import {
 } from "../interfaces/interfcaes";
 import { LATEST_ANIME_RELEASING } from "../graphql/queries/latestReleasingAnime";
 import { ANIME_INFO } from "../graphql/queries/getAnimeInfo";
+import Fuse from "fuse.js";
 
 const API_URL = "https://graphql.anilist.co/";
 
@@ -97,8 +98,21 @@ export const fetchAnimeTitles = async (anime: string): Promise<string[]> => {
         }
       });
     }
+    const fuse = new Fuse(animeTitles, {
+      includeScore: true, // Include score for ranking
+      threshold: 0.3, // Adjust to control fuzziness
+    });
+
+    // Perform fuzzy search on the fetched titles based on user input
+    const fuzzyResults = fuse.search(anime);
+
+    // Map the results to return just the matched titles
+    const matchedTitles = fuzzyResults.map((result) => result.item);
+
+    // Return matched titles from Fuse.js fuzzy search
+    return matchedTitles;
   } catch (error) {
-    console.log(error);
+    console.log("Error fetching anime titles:", error);
+    return [];
   }
-  return animeTitles as any;
 };

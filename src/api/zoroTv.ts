@@ -1,5 +1,6 @@
 import { ANIME } from "@consumet/extensions";
 import { MOVIES } from "@consumet/extensions";
+import Fuse from "fuse.js";
 
 export const zoro = new ANIME.Zoro();
 
@@ -33,9 +34,15 @@ export async function zoroAnimeTitleAutoComplete(anime: string) {
     .filter((animeResult) => animeResult.type === "TV")
     .map((animeResult) => animeResult.title.toString());
 
-  // Return array of titles
-  return filteredTitles;
+  const fuse = new Fuse(filteredTitles, {
+    includeMatches: true,
+    threshold: 0.3,
+  });
+
+  const fuseResult = fuse.search(anime);
+  // Map results to just return the matched titles
+  const matchedTitles = fuseResult.map((result) => result.item);
+
+  // Return the array of matched titles
+  return matchedTitles;
 }
-
-
-

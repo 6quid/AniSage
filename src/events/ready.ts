@@ -3,6 +3,7 @@ import { AiringSchedule } from "../interfaces/interfcaes";
 import cron from "node-cron";
 import { fetchLatestAnime } from "../api/anilist";
 import { type BotClient } from "..";
+import getRandomWaifu, { Waifu } from "../api/randomWaifu";
 
 const channelID = process.env.CHANNEL_ID;
 export default {
@@ -76,6 +77,32 @@ export default {
             // Send a message if no anime is airing today
             channel.send("No TV anime airing today!");
           }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
+
+    // Schedule a job to run every morning at 9 AM
+    cron.schedule("0 9 * * *", async () => {
+      const channel = client.channels.cache.get(channelID!) as TextChannel;
+
+      if (channel) {
+        try {
+          const waifu: Waifu | undefined = await getRandomWaifu();
+
+          const embed = new EmbedBuilder()
+            .setColor(0x9b59b6)
+            .setTitle("Random Waifu")
+            .setDescription(`Waifu of the Day is: \n\n${waifu!.name.full}`)
+            .setImage(waifu!.image.large)
+            .setURL(waifu!.siteUrl)
+            .setTimestamp();
+
+          channel.send({
+            content: "@everyone", // This mentions everyone
+            embeds: [embed],
+          });
         } catch (error) {
           console.log(error);
         }

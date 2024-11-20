@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
-    "start": "tsc && node ./dist/deploy_commands.js && node ./dist/index.js",
+    "start:live": "cross-env BOT_MODE=live tsc && cross-env BOT_MODE=live node ./dist/deploy_commands.js && cross-env BOT_MODE=live node ./dist/index.js",
+    "start:test": "cross-env BOT_MODE=test tsc && cross-env BOT_MODE=test node ./dist/deploy_commands.js && cross-env BOT_MODE=test node ./dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -29,6 +30,7 @@
     "@types/node": "^22.5.2",
     "@types/node-cron": "^3.0.11",
     "@types/ws": "^8.5.12",
+    "cross-env": "^7.0.3",
     "eslint": "^9.9.1",
     "eslint-plugin-graphql": "^3.1.1",
     "nodemon": "^3.1.4",

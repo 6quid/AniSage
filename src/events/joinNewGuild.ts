@@ -16,7 +16,7 @@ export default {
 
     if (defaultChannel) {
       const message = await defaultChannel.send(
-        `Hello! Thank you for inviting me to **${guild.name}**. 🦑\n\nPlease set a channel for daily updates and notifications using the \`/setchannel\` command.`
+        `Hello! Thank you for inviting me to **${guild.name}**. \n\nMy name is **${client.user?.username}** 🦑\n\nPlease set a channel for daily updates and notifications using the \`/setchannel\` command.`
       );
     }
   },

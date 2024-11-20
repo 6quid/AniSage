@@ -3,10 +3,9 @@ import path from "node:path";
 
 //Require the necessary discord.js classes
 import { Client, Collection, GatewayIntentBits } from "discord.js";
-import dotenv from "dotenv";
-import { Command } from "./interfaces/interfcaes";
 
-dotenv.config();
+import { Command } from "./interfaces/interfcaes";
+import { DISCORD_TOKEN } from "./config";
 
 // Custom Client class extending discord.js Client to include a 'commands' collection
 export class BotClient extends Client {
@@ -66,4 +65,4 @@ for (const file of eventFiles) {
   }
 }
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(DISCORD_TOKEN);

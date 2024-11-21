@@ -36,7 +36,7 @@ export async function zoroAnimeTitleAutoComplete(anime: string) {
 
   const fuse = new Fuse(filteredTitles, {
     includeMatches: true,
-    threshold: 0.3,
+    threshold: 0.4,
   });
 
   const fuseResult = fuse.search(anime);

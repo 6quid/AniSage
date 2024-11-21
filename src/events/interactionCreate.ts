@@ -1,9 +1,22 @@
-import { Events, Interaction } from "discord.js";
+import { AutocompleteInteraction, Events, Interaction } from "discord.js";
 import { Anime, Command } from "../interfaces/interfcaes";
 import { type BotClient } from "..";
 import { fetchAnimeTitles } from "../api/anilist";
 import { zoroAnimeTitleAutoComplete } from "../api/zoroTv";
 
+const debounceTimers: { [key: string]: NodeJS.Timeout | null } = {};
+
+const debounce = (cb: Function, wait: number) => {
+  return (...args: any) => {
+    const key = args[0].id;
+    if (debounceTimers[key]) clearTimeout(debounceTimers[key]!);
+
+    debounceTimers[key] = setTimeout(() => {
+      cb(...args);
+      debounceTimers[key] = null;
+    }, wait);
+  };
+};
 export default {
   name: Events.InteractionCreate,
   async execute(interaction: Interaction) {
@@ -49,35 +62,62 @@ export default {
 
       try {
         if (interaction.commandName === "animeinfo") {
-          // Getting the user types keywords
           const focusedValue = interaction.options.getFocused();
 
-          //Gets the AnimeTitles String[]
-          const choices = await fetchAnimeTitles(focusedValue);
-
-          // Filter the Titles to Lower cases
-          const filteredValues = choices.filter((titles) => {
-            return titles.toLowerCase().includes(focusedValue.toLowerCase());
-          });
-
-          await interaction.respond(
-            filteredValues.length
-              ? filteredValues.map((title) => ({ name: title, value: title }))
-              : []
-          );
-        } else if (interaction.commandName === "watch") {
-          const focusedValue = interaction.options.getFocused();
-
+          // Fetch titles only if the input is meaningful
           if (focusedValue.length < 3) {
-            await interaction.respond([]); // Return an empty array if input is too short
+            await interaction.respond([]); // Return empty array for short input
+            return;
+          }
+          const handleAnimeInfoAutoComplete = debounce(
+            async (interaction: AutocompleteInteraction) => {
+              const choices = await fetchAnimeTitles(focusedValue);
+
+              // Filter and respond with results
+              const filteredValues = choices.filter((title) =>
+                title.toLowerCase().includes(focusedValue.toLowerCase())
+              );
+
+              await interaction.respond(
+                filteredValues.length
+                  ? filteredValues.map((title) => ({
+                      name: title,
+                      value: title,
+                    }))
+                  : []
+              );
+            },
+            300
+          ); // Debounce for 300ms
+
+          // Call the debounced handler
+          handleAnimeInfoAutoComplete(interaction);
+        }
+
+        // Debounced handler for "watch" command
+        if (interaction.commandName === "watch") {
+          const focusedValue = interaction.options.getFocused();
+
+          // Short input, return empty response
+          if (focusedValue.length < 3) {
+            await interaction.respond([]);
             return;
           }
 
-          const titles = await zoroAnimeTitleAutoComplete(focusedValue);
+          const handleWatchAutoComplete = debounce(
+            async (interaction: AutocompleteInteraction) => {
+              const titles = await zoroAnimeTitleAutoComplete(focusedValue);
 
-          await interaction.respond(
-            titles.map((title: any) => ({ name: title, value: title })) || []
-          );
+              await interaction.respond(
+                titles.map((title: any) => ({ name: title, value: title })) ||
+                  []
+              );
+            },
+            300
+          ); // Debounce for 300ms
+
+          // Call the debounced handler
+          handleWatchAutoComplete(interaction);
         }
       } catch (error) {
         console.error("Error in AutoComplete: ", error);

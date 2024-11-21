@@ -74,7 +74,7 @@ export const fetchAnimeTitles = async (anime: string): Promise<string[]> => {
   let animeTitles: string[] = [];
 
   const query = `{
-    Page(page: 1, perPage: 25) {
+    Page(page: 1, perPage: 50) {
       media(search: "${anime}") {
         title {
           english
@@ -98,19 +98,19 @@ export const fetchAnimeTitles = async (anime: string): Promise<string[]> => {
         }
       });
     }
+
+    animeTitles = animeTitles.map((title) => title.toLowerCase());
+
     const fuse = new Fuse(animeTitles, {
       includeScore: true, // Include score for ranking
-      threshold: 0.3, // Adjust to control fuzziness
+      threshold: 0.4, // Adjust to control fuzziness
     });
 
     // Perform fuzzy search on the fetched titles based on user input
-    const fuzzyResults = fuse.search(anime);
+    const normalizedInput = anime.trim().toLowerCase();
+    const fuzzyResults = fuse.search(normalizedInput);
 
-    // Map the results to return just the matched titles
-    const matchedTitles = fuzzyResults.map((result) => result.item);
-
-    // Return matched titles from Fuse.js fuzzy search
-    return matchedTitles;
+    return fuzzyResults.map((result) => result.item);
   } catch (error) {
     console.log("Error fetching anime titles:", error);
     return [];

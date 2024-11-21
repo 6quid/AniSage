@@ -8,7 +8,7 @@ import {
 import { Command, InfoMedia, StaffMember } from "../../interfaces/interfcaes";
 import { fetchAnimeInfo } from "../../api/anilist";
 
-function stripHtmlTags(html: string) {
+export function stripHtmlTags(html: string) {
   return html.replace(/<\/?[^>]+(>|$)/g, "");
 }
 // from API to Human Readbale
@@ -97,7 +97,9 @@ const execute: Command["execute"] = async (
       if (anime.staff && anime.staff.edges) {
         animeCreator = anime.staff.edges.find(
           (staff: StaffMember) =>
-            staff.role === "Original Creator" || staff.role === "Director" || "Not Available"
+            staff.role === "Original Creator" ||
+            staff.role === "Director" ||
+            "Not Available"
         );
       }
 

@@ -38,14 +38,6 @@ async function getRandomWaifu(): Promise<Waifu | undefined> {
   try {
     const waifu = await api.getWaifu(); // Fetch a random waifu
 
-    console.log("Waifu Name: ", waifu.name.full); // Log the waifu name
-    console.log("Waifu Description: ", waifu.description); // Log the waifu description
-    console.log("Waifu Image: ", waifu.image.large); // Log the waifu image URL
-    console.log("Waifu Site URL: ", waifu.siteUrl); // Log the waifu site URL
-    console.log("Waifu Media: ", waifu.media.nodes[0].title.romaji); // Log the waifu media title
-    console.log("Waifu Media Type: ", waifu.media.nodes[0].type); // Log the waifu media type
-    console.log("Waifu Media Format: ", waifu.media.nodes[0].format); // Log the waifu media format
-
     return waifu;
   } catch (error) {
     console.error("Error fetching waifu:", error); // Log the error message

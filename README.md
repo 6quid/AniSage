@@ -48,7 +48,7 @@ A feature-rich Discord bot built with TypeScript and Discord.js, designed to pro
 
 5. Start the bot:
     ```sh
-    npm start
+    npm start:live
 
 ## Usage
 

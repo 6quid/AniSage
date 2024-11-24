@@ -107,9 +107,12 @@ export default {
             async (interaction: AutocompleteInteraction) => {
               const titles = await zoroAnimeTitleAutoComplete(focusedValue);
 
+              const limitedChoices = titles.slice(0, 25);
               await interaction.respond(
-                titles.map((title: any) => ({ name: title, value: title })) ||
-                  []
+                limitedChoices.map((title: any) => ({
+                  name: title,
+                  value: title,
+                })) || []
               );
             },
             300

@@ -41,6 +41,8 @@ export const fetchLatestAnime = async (): Promise<AiringSchedule[]> => {
     });
 
     // Return airing schedules
+    console.log(response.data.data.Page.airingSchedules);
+    
     return response.data.data.Page.airingSchedules;
   } catch (error) {
     console.log("Error fetching Latest Anime Releasing from AniList", error);

@@ -1,5 +1,5 @@
 export const LATEST_ANIME_RELEASING = `{
-    Page(page: 1, perPage: 15){
+    Page(page: 1, perPage: 20){
         airingSchedules(notYetAired: true, sort: TIME){
             episode
             airingAt
@@ -13,6 +13,7 @@ export const LATEST_ANIME_RELEASING = `{
                 coverImage {
                         medium
                 }
+                bannerImage
             }
         }
     }

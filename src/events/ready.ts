@@ -35,7 +35,7 @@ export default {
     }
     // Schedule a job to run every Mid-Night
     cron.schedule(
-      "0 0 * * *",
+      "30 */12 * * *",
       async () => {
         for (const channelID of channelIDs) {
           const channel = client.channels.cache.get(channelID!) as TextChannel;
@@ -54,18 +54,32 @@ export default {
               const airingTime = response.map((anime: AiringSchedule) => {
                 return {
                   format: anime.media.format,
-                  title: anime.media.title.romaji,
+                  title: anime.media.title.english ?? anime.media.title.romaji,
                   episode: anime.episode,
                   url: anime.media.siteUrl,
-                  airingAt: new Date(anime.airingAt * 1000).toLocaleString(),
+                  airingAt: anime.airingAt,
+                  bannerImage: anime.media.bannerImage,
                 };
               });
+
+              // Extract non-null banner images
+              const validBannerImages = airingTime
+                .map((anime) => anime.bannerImage)
+                .filter((image) => image !== null);
+
+              // Pick a random banner image or use a fallback
+              const randomBannerImage =
+                validBannerImages[
+                  Math.floor(Math.random() * validBannerImages.length)
+                ] ||
+                "https://preview.redd.it/made-this-anime-banner-in-pixlr-v0-eni9yujjzvxa1.jpg?width=640&crop=smart&auto=webp&s=c50ebd777da4882f6ac9d293a7a61b4ac4e88f23";
 
               // Create embed for sending messages
               const embed = new EmbedBuilder()
                 .setColor(0x9b59b6)
                 .setTitle("Anime Airing Today")
                 .setDescription("Here are the anime airing today:")
+                .setImage(randomBannerImage)
                 .setThumbnail(
                   "https://ashisheditz.com/wp-content/uploads/2024/03/cool-anime-pfp-demon-slayer-HD.jpg"
                 )
@@ -75,17 +89,26 @@ export default {
 
               // Iterate through airing time data
               for (const anime of airingTime) {
-                const date = new Date().toJSON().slice(0, 10);
-                const animeDate = anime.airingAt.slice(0, 10);
-                const animeTime = anime.airingAt.slice(12, 25);
+                const currentDateUTC = new Date().toISOString().slice(0, 10);
 
-                // Check if the anime is a TV show and airing today
-                if (anime.format === "TV" && date === animeDate) {
+                const animeAiringDate = new Date(anime.airingAt * 1000);
+
+                const localTime = animeAiringDate.toLocaleTimeString("en-US", {
+                  timeZone: "America/New_York",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                });
+
+                const animeDateUTC = animeAiringDate.toISOString().slice(0, 10);
+
+                // Check if the anime is airing today
+                if (animeDateUTC === currentDateUTC) {
                   animeCount++;
                   embed
                     .addFields({
-                      name: `${anime.title} (Episode: ${anime.episode})`,
-                      value: `Airing at ${animeTime} | Link: (${anime.url})`,
+                      name: `▸ ${anime.title} (Episode: ${anime.episode})`,
+                      value: `Airing at ${localTime} • ${animeDateUTC} \nLink: (${anime.url})  \nFormat: ${anime.format}`,
                     })
                     .setTimestamp();
                 }

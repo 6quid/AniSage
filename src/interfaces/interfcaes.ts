@@ -31,6 +31,7 @@ export interface Media {
   coverImage: {
     medium: string;
   };
+  bannerImage: string;
 }
 export interface StaffMember {
   role: string; // The role of the staff member

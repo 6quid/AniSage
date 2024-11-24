@@ -41,8 +41,7 @@ export const fetchLatestAnime = async (): Promise<AiringSchedule[]> => {
     });
 
     // Return airing schedules
-    console.log(response.data.data.Page.airingSchedules);
-    
+
     return response.data.data.Page.airingSchedules;
   } catch (error) {
     console.log("Error fetching Latest Anime Releasing from AniList", error);
@@ -82,7 +81,7 @@ export const fetchAnimeTitles = async (anime: string): Promise<string[]> => {
           english
           romaji
         }
-        format  
+        type  
       }
     }
   }`;
@@ -95,7 +94,7 @@ export const fetchAnimeTitles = async (anime: string): Promise<string[]> => {
     const media: Anime[] = response.data.data.Page.media;
     if (media.length > 0) {
       media.forEach((anime) => {
-        if (anime.format === "TV" || anime.format === "Manga") {
+        if (anime.type === "ANIME" || anime.type === "MANGA") {
           animeTitles.push(anime.title.english ?? anime.title.romaji);
         }
       });

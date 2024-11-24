@@ -33,7 +33,7 @@ export default {
       );
       return;
     }
-    // Schedule a job to run every Mid-Night
+    // Schedule a job to run every 12 hours at 12:30 AM and 12:30 PM
     cron.schedule(
       "30 */12 * * *",
       async () => {
@@ -133,9 +133,9 @@ export default {
       { timezone: "America/New_York" }
     );
 
-    // Schedule a job to run every morning at 9 AM
+    // Schedule a job to run every morning at 10 AM
     cron.schedule(
-      "0 9 * * *",
+      "0 10 * * *",
       async () => {
         for (const channelID of channelIDs) {
           const channel = client.channels.cache.get(channelID!) as TextChannel;

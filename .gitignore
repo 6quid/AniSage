@@ -8,7 +8,7 @@ node_modules
 .vscode/
 
 # Build output
-./dist/
+dist
 
 # ChannelIds
 channels.json

@@ -9,6 +9,7 @@ export interface Command {
 //Interfcaes for Anime Data
 
 export interface Anime {
+  type: string;
   id: number;
   title: {
     english?: string;
@@ -47,6 +48,7 @@ export interface Staff {
 }
 
 export interface InfoMedia {
+  type: string;
   title: {
     romaji: string;
     native: string;

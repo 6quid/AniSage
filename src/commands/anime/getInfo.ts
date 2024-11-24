@@ -54,10 +54,10 @@ const data = new SlashCommandBuilder()
   //option 2 Asks for Format of the Anime; TV, MOVIE, MANGA etc;
   .addStringOption((option) =>
     option
-      .setName("format")
-      .setDescription("Select the Format for the Anime")
+      .setName("type")
+      .setDescription("Select the type for the search")
       .addChoices(
-        { name: "Anime", value: "TV" },
+        { name: "Anime", value: "ANIME" },
         { name: "Manga", value: "MANGA" }
       )
       .setRequired(true)
@@ -77,8 +77,8 @@ const execute: Command["execute"] = async (
     //storing the user Format selection in animeFormat and having "TV" as default
     const animeFormat: string =
       (interaction.options as CommandInteractionOptionResolver).getString(
-        "format"
-      ) || "TV";
+        "type"
+      ) || "ANIME";
 
     try {
       const animeDetails: InfoMedia | null = await fetchAnimeInfo(
@@ -123,10 +123,11 @@ const execute: Command["execute"] = async (
         latestEpisode = anime.nextAiringEpisode?.episode!;
       }
 
-      if (anime.format === "TV") {
+      if (anime.type === "ANIME") {
         const embed = new EmbedBuilder()
           .setColor(0x9b59b6)
           .setTitle(anime.title.romaji)
+          .setURL(anime.siteUrl)
           .setDescription(clearDescription)
           .setThumbnail(anime.coverImage.large)
           .addFields(
@@ -164,8 +165,8 @@ const execute: Command["execute"] = async (
               value: `${readableStatus}`,
             },
             {
-              name: "Link",
-              value: `${anime.siteUrl}`,
+              name: "Format",
+              value: `${anime.format}`,
             }
           )
           .setImage(anime.bannerImage)
@@ -175,7 +176,7 @@ const execute: Command["execute"] = async (
           });
 
         interaction.reply({ embeds: [embed] });
-      } else if (anime.format === "MANGA") {
+      } else if (anime.type === "MANGA") {
         let latestChapter: string | number;
         if (anime.status === "RELEASING") {
           latestChapter = "Ongoing";

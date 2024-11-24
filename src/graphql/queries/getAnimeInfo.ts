@@ -1,5 +1,6 @@
 export const ANIME_INFO = (search: string, format: string) => `{
-  Media(search: "${search}", format: ${format}) {
+  Media(search: "${search}", type: ${format}) {
+    type
     format
     title {
       romaji

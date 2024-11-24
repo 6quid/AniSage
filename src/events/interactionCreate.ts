@@ -65,7 +65,7 @@ export default {
           const focusedValue = interaction.options.getFocused();
 
           // Fetch titles only if the input is meaningful
-          if (focusedValue.length < 3) {
+          if (focusedValue.length < 2) {
             await interaction.respond([]); // Return empty array for short input
             return;
           }
@@ -78,13 +78,12 @@ export default {
                 title.toLowerCase().includes(focusedValue.toLowerCase())
               );
 
+              const limitedChoices = filteredValues.slice(0, 25);
               await interaction.respond(
-                filteredValues.length
-                  ? filteredValues.map((title) => ({
-                      name: title,
-                      value: title,
-                    }))
-                  : []
+                limitedChoices.map((title) => ({
+                  name: title,
+                  value: title,
+                })) || []
               );
             },
             300

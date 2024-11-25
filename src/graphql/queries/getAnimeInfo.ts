@@ -1,5 +1,5 @@
 export const ANIME_INFO = (search: string, format: string) => `{
-  Media(search: "${search}", type: ${format}) {
+  Media(search: "${search}", type: ${format} , sort: POPULARITY_DESC) {
     type
     format
     title {

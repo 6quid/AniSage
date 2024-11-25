@@ -11,6 +11,9 @@ import {
 import { LATEST_ANIME_RELEASING } from "../graphql/queries/latestReleasingAnime";
 import { ANIME_INFO } from "../graphql/queries/getAnimeInfo";
 import Fuse from "fuse.js";
+import { getFormattedDate } from "../utils/dateUtil";
+import { logErrorToChannel } from "../utils/logErrors";
+import { generateErrorMessage } from "../utils/errorMessage";
 
 const API_URL = "https://graphql.anilist.co/";
 
@@ -27,8 +30,13 @@ export const fetchTrendingAnime = async (
     // Extract and return trending anime list
     return response.data.data.Page.media;
   } catch (error) {
-    console.log("Error fetching data from AniList:", error);
-    throw new Error("Failed to fetch data");
+    throw new Error(
+      generateErrorMessage(
+        "fetchTrendingAnime",
+        { SortOption: sortOption },
+        error
+      )
+    );
   }
 };
 
@@ -44,8 +52,7 @@ export const fetchLatestAnime = async (): Promise<AiringSchedule[]> => {
 
     return response.data.data.Page.airingSchedules;
   } catch (error) {
-    console.log("Error fetching Latest Anime Releasing from AniList", error);
-    throw new Error("Failed to fetch Releasing Anime");
+    throw new Error(generateErrorMessage("fetchLatestAnime", {}, error));
   }
 };
 
@@ -63,9 +70,12 @@ export const fetchAnimeInfo = async (
     // Return the Media data
     return response.data.data.Media;
   } catch (error) {
-    console.log(`Error retrieving info about ${search}. \n${error}`);
     throw new Error(
-      `Failed to retrieve Information about ${search} with format ${format}`
+      generateErrorMessage(
+        "fetchAnimeInfo()",
+        { Search: search, Format: format },
+        error
+      )
     );
   }
 };
@@ -113,7 +123,17 @@ export const fetchAnimeTitles = async (anime: string): Promise<string[]> => {
 
     return fuzzyResults.map((result) => result.item);
   } catch (error) {
-    console.log("Error fetching anime titles:", error);
-    return [];
+    const errorDetails = `
+    **❌ Error Fetching AutoComplete Anime Titles**
+    **Function:** \`fetchAnimeTitles()\`
+    **Input:** \`${anime}\`
+    **Date:** \`${getFormattedDate()}\`
+    **Trace:** 
+    \`\`\`
+    ${(error as any).stack || error}
+    \`\`\`
+    `;
+    await logErrorToChannel(errorDetails); // Log to your error log channel
+    return []; // Return an empty array as fallback
   }
 };

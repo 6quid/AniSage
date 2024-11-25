@@ -3,6 +3,7 @@ import { Anime, Command } from "../interfaces/interfcaes";
 import { type BotClient } from "..";
 import { fetchAnimeTitles } from "../api/anilist";
 import { zoroAnimeTitleAutoComplete } from "../api/zoroTv";
+import { logErrorToChannel } from "../utils/logErrors";
 
 const debounceTimers: { [key: string]: NodeJS.Timeout | null } = {};
 
@@ -35,7 +36,8 @@ export default {
       try {
         await command.execute(interaction);
       } catch (error) {
-        console.error(error);
+        const client = interaction.user.username;
+        logErrorToChannel(error as any, client);
         if (interaction.replied || interaction.deferred) {
           await interaction.followUp({
             content: "There was an error while executing this command!",
@@ -122,7 +124,12 @@ export default {
           handleWatchAutoComplete(interaction);
         }
       } catch (error) {
-        console.error("Error in AutoComplete: ", error);
+        const client = interaction.user.username;
+        logErrorToChannel(
+          `❌ Error In AutoComplete 
+          \n${error}` as any,
+          client
+        );
         await interaction.respond([]);
       }
     }

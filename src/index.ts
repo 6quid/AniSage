@@ -6,6 +6,7 @@ import { Client, Collection, GatewayIntentBits } from "discord.js";
 
 import { Command } from "./interfaces/interfcaes";
 import { DISCORD_TOKEN } from "./config";
+import { initializeBotClient } from "./utils/logErrors";
 
 // Custom Client class extending discord.js Client to include a 'commands' collection
 export class BotClient extends Client {
@@ -19,6 +20,8 @@ const client = new BotClient({
     GatewayIntentBits.MessageContent,
   ],
 });
+
+initializeBotClient(client);
 
 // Initialize the commands collection
 client.commands = new Collection();

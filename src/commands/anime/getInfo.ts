@@ -1,12 +1,16 @@
 import {
+  Client,
   CommandInteraction,
   CommandInteractionOptionResolver,
   EmbedBuilder,
   GuildMember,
   SlashCommandBuilder,
+  TextChannel,
 } from "discord.js";
 import { Command, InfoMedia, StaffMember } from "../../interfaces/interfcaes";
 import { fetchAnimeInfo } from "../../api/anilist";
+import { type BotClient } from "../../";
+import { logErrorToChannel } from "../../utils/logErrors";
 
 export function stripHtmlTags(html: string) {
   return html.replace(/<\/?[^>]+(>|$)/g, "");
@@ -236,13 +240,15 @@ const execute: Command["execute"] = async (
         interaction.reply({ embeds: [embed] });
       }
     } catch (error) {
+      const client = interaction.user.username;
+      logErrorToChannel(error as any, client);
+
       // Send an informative message to the member
       await interaction.reply({
         content:
           "Sorry, I couldn't find any anime details for that search. Please try again!",
         ephemeral: true,
       });
-      console.error("Error fetching anime details:", error);
     }
   }
 };

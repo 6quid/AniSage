@@ -1,4 +1,4 @@
-import { get } from "http";
+import { generateErrorMessage } from "../utils/errorMessage";
 
 const Client = require("waifu.it");
 require("dotenv").config();
@@ -40,7 +40,7 @@ async function getRandomWaifu(): Promise<Waifu | undefined> {
 
     return waifu;
   } catch (error) {
-    console.error("Error fetching waifu:", error); // Log the error message
+    generateErrorMessage("getRandomWaifu()", {}, error); // Log the error message
   }
 }
 

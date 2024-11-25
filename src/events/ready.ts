@@ -6,6 +6,8 @@ import { fetchLatestAnime } from "../api/anilist";
 import { type BotClient } from "..";
 import getRandomWaifu, { Waifu } from "../api/randomWaifu";
 import { stripHtmlTags } from "../commands/anime/getInfo";
+import { log } from "console";
+import { logErrorToChannel } from "../utils/logErrors";
 
 let channelIDs: string[] = [];
 
@@ -28,8 +30,10 @@ export default {
     await fetchChannelIDs();
 
     if (channelIDs.length === 0) {
-      console.error(
-        "No channels found in channels.json. Cron job will not start."
+      logErrorToChannel(
+        `❌
+        No channel IDs found in channels.json \nCron Job will not Start`,
+        client.user?.username
       );
       return;
     }
@@ -125,7 +129,10 @@ export default {
                 channel.send("No TV anime airing today!");
               }
             } catch (error) {
-              console.log(error);
+              logErrorToChannel(
+                `Error in Cron Job for Anime's Airing ${error as any}`,
+                client.user?.username
+              );
             }
           }
         }
@@ -173,7 +180,10 @@ export default {
                 embeds: [embed],
               });
             } catch (error) {
-              console.log(error);
+              logErrorToChannel(
+                `Error in Cron Job for Waifu of Day ${error as any}`,
+                client.user?.username
+              );
             }
           }
         }
